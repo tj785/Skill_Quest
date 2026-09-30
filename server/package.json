@@ -1,0 +1,39 @@
+{
+  "name": "@cq/server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "esbuild src/index.ts src/cli.ts --bundle --platform=node --format=esm --packages=external --outdir=dist --out-extension:.js=.js --alias:@cq/shared=../shared/src/index.ts",
+    "start": "node dist/index.js",
+    "migrate": "node dist/cli.js migrate",
+    "seed": "node dist/cli.js seed",
+    "backup": "node dist/cli.js backup",
+    "restore": "node dist/cli.js restore",
+    "test": "tsx --test test/*.test.ts"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^18.0.4",
+    "express": "^5.2.1",
+    "helmet": "^8.3.0",
+    "pg": "^8.23.0",
+    "socket.io": "^4.8.4",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.3.16",
+    "@noble/hashes": "^2.4.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.3",
+    "@types/pg": "^8.23.1",
+    "esbuild": "^0.28.2",
+    "socket.io-client": "^4.8.4",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}

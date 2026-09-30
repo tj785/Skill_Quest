@@ -1,0 +1,36 @@
+# One-command local or school-server install:  docker compose up -d
+# Then open http://localhost:3000  (change the passwords below first!)
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: cq
+      POSTGRES_PASSWORD: change-this-db-password
+      POSTGRES_DB: character_quest
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cq -d character_quest"]
+      interval: 5s
+      retries: 10
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgres://cq:change-this-db-password@db:5432/character_quest
+      PORT: "3000"
+      SESSION_SECRET: change-this-to-a-long-random-string
+      SEED_DEMO: "true"
+      ADMIN_USERNAME: admin
+      ADMIN_PASSWORD: change-this-admin-password
+      TEACHER_SIGNUP_CODE: letmeteach
+      # Set to "production" only when served over HTTPS (secure cookies).
+      NODE_ENV: development
+volumes:
+  dbdata:

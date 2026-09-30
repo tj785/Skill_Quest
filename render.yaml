@@ -1,0 +1,32 @@
+# Render.com Blueprint: New > Blueprint > pick this repository.
+# Creates a PostgreSQL database and the Character Quest web service.
+databases:
+  - name: character-quest-db
+    databaseName: character_quest
+    user: cq
+    plan: basic-256mb
+services:
+  - type: web
+    name: character-quest
+    runtime: node
+    plan: starter
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: character-quest-db
+          property: connectionString
+      - key: NODE_ENV
+        value: production
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: SEED_DEMO
+        value: "true"
+      - key: ADMIN_USERNAME
+        value: admin
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: TEACHER_SIGNUP_CODE
+        sync: false
